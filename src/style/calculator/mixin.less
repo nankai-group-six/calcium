@@ -78,22 +78,20 @@
 .input-box-style(@ltr: true) {
     .display {
         display: flex;
-        // justify-content: flex-end;
+        align-items: center;
         color: var(--ca-gray-light);
         overflow-x: auto;
         overflow-y: hidden;
         cursor: text;
         .scrollbar-style();
         & > span {
-            display: inline;
-        }
-        & > *:first-child when (@ltr = false) {
-            // see https://www.zhangxinxu.com/wordpress/2021/12/flex-end-overflow/
-            margin-left: auto !important;
+            display: inline-flex;
+            align-items: center;
+            .katex-display {
+                margin: 0;
+            }
         }
         .cursor {
-            margin: 1em 0; // keep the cursor fixed on the middle
-            
             // make the symbols fixed when the cursor moves
             margin-left: if(@ltr = true, 0, -1px);
             margin-right: if(@ltr = true, -1px, 0);
@@ -147,29 +145,37 @@
     overflow-y: auto;
     .scrollbar-style();
     &-item {
-        @transition-delay: 90ms;
         display: flex;
         height: 25px;
         margin: 3px 20px;
         padding: 3px 7px;
         border-radius: 5px;
-        transition: background-color @transition-delay ease;
         animation: function-item-added 100ms ease;
         animation-iteration-count: 1;
         &-tag {
-            flex: 1;
-            .function-tag();
+            width: 45px;
             padding: 0 3px;
+            .function-tag();
         }
         &-value {
             flex: 5;
+            width: 100%;
             display: flex;
             align-items: center;
             color: var(--ca-gray-light);
+            overflow: hidden;
+            position: relative;
+            .overflow-shadow {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(to left, var(--ca-light2), transparent);
+            }
         }
         &-buttons {
             flex: .5;
-            display: flex;
+            display: none;
             button {
                 display: flex;
                 align-items: center;
@@ -178,10 +184,10 @@
                 outline: none;
                 background-color: transparent;
                 svg {
+                    fill: var(--ca-gray1);
                     width: 19px;
                     height: 19px;
                     margin-top: 3px;
-                    transition: fill @transition-delay ease;
                     cursor: pointer;
                 }
             }
@@ -191,8 +197,11 @@
         }
         &:hover {
             background-color: var(--ca-gray9);
-            .function-list-item-buttons svg:hover {
-                fill: var(--ca-gray1);
+            .function-list-item-buttons {
+                display: flex;
+            }
+            .function-list-item-value .overflow-shadow {
+                background: linear-gradient(to left, var(--ca-gray9), transparent);
             }
         }
     }
